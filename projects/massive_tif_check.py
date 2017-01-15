@@ -151,6 +151,14 @@ def tif_check_mp(in_folder):
     # print "create update files for:", InFolder, "by worker:", process_name
     tif_check(tile_folder=in_folder, user='tle', des=des)
 
+def union_output(temp_folder=None):
+    # check and assign temp folder
+    if temp_folder == None:
+        cwd = os.path.dirname(os.path.realpath(__file__))
+        temp_folder = '%s/temp' % cwd
+
+    # open all
+
 def tif_check_main(in_big_folder):
     '''
     get all tile folder in in_folder and through to multiprocessing pool, after that, prepare a list of error file
@@ -180,4 +188,4 @@ def tif_check_main(in_big_folder):
 
 
 
-tif_check_main("/home/tuan/work/SGRTOUTPUT/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/")
+tif_check_main("/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/")
