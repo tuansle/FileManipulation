@@ -45,10 +45,15 @@ def tif_check(tile_folder, out_folder=None, user='tle', des=''):
         # create filenames
         # ---- when adding new table, specify the new update file here ----
         outfileR = OutFolder + os.sep + 'resampled_%s_%s_%s' %(time, user, des) # resampled data
+        outfileR_remove = OutFolder + os.sep + 'remove_resampled_%s_%s_%s' %(time, user, des) # resampled data
         outfileTC = OutFolder + os.sep + 'tcomposites_%s_%s_%s' %(time, user, des) # temporal composites
+        outfileTC_remove = OutFolder + os.sep + 'remove_tcomposites_%s_%s_%s' %(time, user, des) # temporal composites
         outfileP = OutFolder + os.sep + 'parameters_%s_%s_%s' %(time, user, des) # parameters
+        outfileP_remove = OutFolder + os.sep + 'remove_parameters_%s_%s_%s' %(time, user, des) # parameters
         outfileW = OutFolder + os.sep + 'water_%s_%s_%s' %(time, user, des) # water
+        outfileW_remove = OutFolder + os.sep + 'remove_water_%s_%s_%s' %(time, user, des) # water
         outfileSSM = OutFolder + os.sep + 'ssm_%s_%s_%s' %(time, user, des) # surface soil moisture
+        outfileSSM_remove = OutFolder + os.sep + 'remove_ssm_%s_%s_%s' %(time, user, des) # surface soil moisture
 
         # define outfile
         if tile_folder[-39:-30] == 'resampled' and tile_folder[-61:-49] == 'preprocessed':
@@ -57,10 +62,24 @@ def tif_check(tile_folder, out_folder=None, user='tle', des=''):
                 of.write(item + '\n')
             of.close()
 
+            # write full list of files to be removed
+            of = open(outfileR_remove, 'w')
+            for item in error_file_list:
+                for file in fnmatch.filter(tif_list, (os.path.basename(item)[:-57]+"*.tif")):
+                    of.write(tile_folder+os.sep+file + '\n')
+            of.close()
+
         elif tile_folder[-41:-30] == 'tcomposites' and tile_folder[-59:-51] == 'products':
             of = open(outfileTC, 'w')
             for item in error_file_list:
                 of.write(item + '\n')
+            of.close()
+
+            # write full list of files to be removed
+            of = open(outfileTC_remove, 'w')
+            for item in error_file_list:
+                for file in fnmatch.filter(tif_list, (os.path.basename(item)[:-57] + "*.tif")):
+                    of.write(tile_folder + os.sep + file + '\n')
             of.close()
 
         elif tile_folder[-38:-30] == 'par_sgrt' and tile_folder[-58:-48] == 'parameters':
@@ -69,16 +88,37 @@ def tif_check(tile_folder, out_folder=None, user='tle', des=''):
                 of.write(item + '\n')
             of.close()
 
+            # write full list of files to be removed
+            of = open(outfileP_remove, 'w')
+            for item in error_file_list:
+                for file in fnmatch.filter(tif_list, (os.path.basename(item)[:-57] + "*.tif")):
+                    of.write(tile_folder + os.sep + file + '\n')
+            of.close()
+
         elif tile_folder[-35:-30] == 'water' and tile_folder[-53:-45] == 'products':
             of = open(outfileW, 'w')
             for item in error_file_list:
                 of.write(item + '\n')
             of.close()
 
+            # write full list of files to be removed
+            of = open(outfileW_remove, 'w')
+            for item in error_file_list:
+                for file in fnmatch.filter(tif_list, (os.path.basename(item)[:-57] + "*.tif")):
+                    of.write(tile_folder + os.sep + file + '\n')
+            of.close()
+
         elif tile_folder[-33:-30] == 'ssm' and tile_folder[-51:-43] == 'products':
             of = open(outfileSSM, 'w')
             for item in error_file_list:
                 of.write(item+'\n')
+            of.close()
+
+            # write full list of files to be removed
+            of = open(outfileSSM_remove, 'w')
+            for item in error_file_list:
+                for file in fnmatch.filter(tif_list, (os.path.basename(item)[:-57] + "*.tif")):
+                    of.write(tile_folder + os.sep + file + '\n')
             of.close()
 
         else:
@@ -105,12 +145,11 @@ def tif_check_mp(in_folder):
     :return:
     '''
     # Create update files:
-    process_name = str(mp.current_process())[20]
-    # print "create update files for:", InFolder, "by worker:", process_name
-    tif_check(tile_folder=in_folder, user='tle',
-                                   des='worker_%s_tile_%s%s_wflow_%s' % (
-                                   process_name, in_folder[-17:-15], in_folder[-10:], in_folder[-29:-24]))
+    # process_name = str(mp.current_process())[20]
+    des = in_folder[-61:].replace(os.sep, "")
 
+    # print "create update files for:", InFolder, "by worker:", process_name
+    tif_check(tile_folder=in_folder, user='tle', des=des)
 
 def tif_check_main(in_big_folder):
     '''
@@ -135,10 +174,10 @@ def tif_check_main(in_big_folder):
         if not (tile_folder[-2:].isalpha() or tile_folder[-10:-8].isalpha()):  # TODO: add a better filter
             dir_list_all.append(tile_folder)
 
-    print dir_list_all
     # process the list with multiprocessing pool
     pool = mp.Pool(8)
     pool.map(tif_check_mp, dir_list_all)
+
 
 
 tif_check_main("/home/tuan/work/SGRTOUTPUT/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/")
