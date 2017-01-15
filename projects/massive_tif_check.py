@@ -157,7 +157,27 @@ def union_output(temp_folder=None):
         cwd = os.path.dirname(os.path.realpath(__file__))
         temp_folder = '%s/temp' % cwd
 
-    # open all
+    obj = ["folder_nofile", "remove_ssm_", "ssm_", "remove_water_", "water_", "remove_parameters_",
+           "resampled_", "remove_resampled_", "tcomposites_", "remove_tcomposites_", "parameters_"]
+
+    for product_type in obj:
+        # open all files in each type
+        all_files = []
+        for file in fnmatch.filter(os.listdir(temp_folder), product_type+ "*"):
+            file_full_path = temp_folder + os.sep + file
+            # read file, append to list
+            with open(file_full_path) as f:
+                lines = f.read().splitlines()
+                for line in lines:
+                    all_files.append(line)
+        # write to only one file
+        if all_files:
+            outfile_full_path = temp_folder + os.sep + "all_"+product_type
+            tf = open(outfile_full_path, 'w')
+            for item in all_files:
+                tf.write("%s\n" % item)
+            tf.close()
+
 
 def tif_check_main(in_big_folder):
     '''
@@ -188,4 +208,5 @@ def tif_check_main(in_big_folder):
 
 
 
-tif_check_main("/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/")
+tif_check_main("/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/")
+union_output()
