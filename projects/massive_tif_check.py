@@ -157,7 +157,7 @@ def union_output(temp_folder=None):
         cwd = os.path.dirname(os.path.realpath(__file__))
         temp_folder = '%s/temp' % cwd
 
-    obj = ["folder_nofile", "remove_ssm_", "ssm_", "remove_water_", "water_", "remove_parameters_",
+    obj = ["folder_error", "folder_nofile", "remove_ssm_", "ssm_", "remove_water_", "water_", "remove_parameters_",
            "resampled_", "remove_resampled_", "tcomposites_", "remove_tcomposites_", "parameters_"]
 
     for product_type in obj:
