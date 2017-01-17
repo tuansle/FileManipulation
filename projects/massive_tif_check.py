@@ -208,5 +208,5 @@ def tif_check_main(in_big_folder):
 
 
 
-tif_check_main("/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/")
-union_output()
+#tif_check_main("/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/")
+#union_output()
