@@ -121,6 +121,8 @@ def process(filelist = None, full_path = True):
         remove_image_edges(src_img_file=fname, dst_img_file=dst_file, src_nodata=-9999, pixels=40)
         print filelist[-14:-4], ": => ({}/{}):".format(idx+1, len(faulty_scenes)), os.path.basename(fname)
 
+    print "black edges removal is done for: ", tilename_out
+
 
 def main(mp=True):
     filelist_list = []
