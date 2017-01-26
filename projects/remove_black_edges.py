@@ -92,10 +92,16 @@ def remove_image_edges(src_arr=None, src_img_file=None, dst_img_file=None,
     # return dilated image array
     return src_arr
 
-def process(filelist = None):
+def process(filelist = None, full_path = True):
+    # keep it the same
+    if  full_path:
+        indir = ""
+        tilename = ""
+    else:
+        indir = r"/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
+        tilename = os.path.basename(os.path.splitext(filelist)[0])
 
-    indir = r"/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
-    tilename = os.path.basename(os.path.splitext(filelist)[0])
+    tilename_out = os.path.basename(os.path.splitext(filelist)[0])
 
     with open(filelist) as f:
         faulty_scenes = [os.path.join(indir, tilename, x.strip()) for x in f.readlines() if x.strip()]
@@ -104,33 +110,35 @@ def process(filelist = None):
         #    with open(filelist) as f:
         #        faulty_scenes = [x.strip() for x in f.readlines() if x.strip()]
 
-    outdir = r"/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/quality_check_for_black_edge_ia/{}".format(
-        tilename)
+    # IA: please change the output directory
+    outdir = r"/eodc/private/tuwgeo/users/tle/Copernicus_HRLs/Resampled_black_edge_removal/2ndwave/1sttime/{}".format(
+        tilename_out)
     if not os.path.exists(outdir):
         os.makedirs(outdir)
-
-    # faulty_scenes = ["/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/E032N016T1/M20150205_183605--_SIG0-----_S1AIWGRDH1VVA_045_A0101_EU010M_E032N016T1.tif"]
 
     for idx, fname in enumerate(faulty_scenes):
         dst_file = os.path.join(outdir, os.path.basename(fname))
         remove_image_edges(src_img_file=fname, dst_img_file=dst_file, src_nodata=-9999, pixels=40)
-        print filelist[-14:-4], ": => ({}/{}):".format(idx, len(faulty_scenes)), os.path.basename(fname)
+        print filelist[-14:-4], ": => ({}/{}):".format(idx+1, len(faulty_scenes)), os.path.basename(fname)
 
 
 def main(mp=True):
     filelist_list = []
-    for filelist in glob.glob("/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/quality_check_for_black_edge_ia/SCao_list_checked_by_iali/update_iali/1_20_tiles/E*N*T*.txt"):
+
+    file_lists_dir = '/eodc/private/tuwgeo/users/iali/Copernicus_HRLs_iali/round2_129_tiles/round2_129_bad_tile_list/1_100_tiles/'
+    for filelist in glob.glob(os.path.join(file_lists_dir,"E*N*T*.txt")):
         if os.stat(filelist).st_size != 0:
             filelist_list.append(filelist)
+
+    print len(filelist_list), "list is going to be processed"
     if mp:
         print "multiprocessing..."
-        pool = mp2.Pool(6)
+        pool = mp2.Pool(10)
         pool.map(process, filelist_list)
     else:
         for filelist in filelist_list:
             process(filelist)
     print "Done!"
-
 
 if __name__ == '__main__':
     main()
