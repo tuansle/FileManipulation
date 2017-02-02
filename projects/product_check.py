@@ -23,8 +23,10 @@ def check_product(in_big_folder=None, products=[], outfile=None):
             tif_list = (fnmatch.filter(os.listdir(tile_folder), 'M*.tif') + fnmatch.filter(os.listdir(tile_folder), 'D*.tif'))
             for filename in tif_list:
                 if filename[19:28] in product_formatted:
-                    outfolder_list.append(tile_folder)
-                    break
+                    product_formatted.remove(filename[19:28])
+                    if product_formatted == []:
+                        outfolder_list.append(tile_folder)
+                        break
 
     # write to file
     if outfile == None:
@@ -34,7 +36,7 @@ def check_product(in_big_folder=None, products=[], outfile=None):
             os.makedirs(OutFolder)
 
     #write to file, really
-    outfile = os.path.join(OutFolder, 'check_product_success.txt')
+    outfile = os.path.join(OutFolder, in_big_folder[-28:-13].replace("/", "") + '_processed.txt')
     fl = open(outfile, 'w')
     for folder in outfolder_list:
         fl = open(outfile, 'a')
@@ -42,5 +44,11 @@ def check_product(in_big_folder=None, products=[], outfile=None):
 
 
 
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_sgrt/B0101/EQUI7_EU010M/", products=['TMAXPLIA','TMAXSIG0','TMENSIG0','TMINPLIA','TMINSIG0','TP95SIG0','TP05SIG0'])
 check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
-
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
+#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
