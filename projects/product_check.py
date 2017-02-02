@@ -35,7 +35,7 @@ def check_product(in_big_folder=None, products=[], outfile=None):
 
     #write to file, really
     outfile = os.path.join(OutFolder, 'check_product_success.txt')
-    fl = open(outfile)
+    fl = open(outfile, 'w')
     for folder in outfolder_list:
         fl = open(outfile, 'a')
         fl.write('%s\n' % (folder))
