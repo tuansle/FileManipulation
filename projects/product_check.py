@@ -17,12 +17,13 @@ def check_product(in_big_folder=None, products=[], outfile=None):
     outfolder_list = []
     # list all subfolder in this folder
     for tile_folder in fnmatch.filter([x[0] for x in os.walk(in_big_folder)], '*/E*N*T*'):
-        # create a temporary instance of product_formatted
-        product_formatted_temp = product_formatted
         # filter to get tile folder
         if not (tile_folder[-2:].isalpha() or tile_folder[-10:-8].isalpha()):  # TODO: add a better filter
             # go to every subfolder to check if there is any file with assigned pattern, add to list
             tif_list = (fnmatch.filter(os.listdir(tile_folder), 'M*.tif') + fnmatch.filter(os.listdir(tile_folder), 'D*.tif'))
+            # create a temporary instance of product_formatted
+            product_formatted_temp = product_formatted
+
             for filename in tif_list:
                 if filename[19:28] in product_formatted_temp:
                     product_formatted_temp.remove(filename[19:28])
