@@ -22,7 +22,7 @@ def check_product(in_big_folder=None, products=[], outfile=None):
             # go to every subfolder to check if there is any file with assigned pattern, add to list
             tif_list = (fnmatch.filter(os.listdir(tile_folder), 'M*.tif') + fnmatch.filter(os.listdir(tile_folder), 'D*.tif'))
             # create a temporary instance of product_formatted
-            product_formatted_temp = product_formatted
+            product_formatted_temp = list(product_formatted)
 
             for filename in tif_list:
                 if filename[19:28] in product_formatted_temp:
