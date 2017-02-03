@@ -21,8 +21,8 @@ def text_dif_intersect(file1, file2):
 
     # write to file, really
     outfile_dup = os.path.join(OutFolder, 'outfile_dup.txt')
-    outfile_file1_dif_file2 = os.path.join(OutFolder, 'outfile_file1_dif_file2.txt')
-    outfile_file2_dif_file1 = os.path.join(OutFolder, 'outfile_file2_dif_file1.txt')
+    outfile_file1_dif_file2 = os.path.join(OutFolder, 'dif_belong_to_file1.txt')
+    outfile_file2_dif_file1 = os.path.join(OutFolder, 'dif_belong_to_file2.txt')
 
     fl = open(outfile_dup, 'w')
     for folder in duplicates:
@@ -39,5 +39,9 @@ def text_dif_intersect(file1, file2):
         fl = open(outfile_file2_dif_file1, 'a')
         fl.write('%s\n' % (folder))
 
-text_dif_intersect("/workdir/projects/Copernicus_HRL/data_proc_status/temp/wholeEU.txt", "/workdir/projects/Copernicus_HRL/data_proc_status/temp/EU_preprocessed_not_our_ROI_but_whole_EU.txt")
+
+file1 = "/workdir/projects/Copernicus_HRL/data_proc_status/3_preprocessed_tiles_EU/EU_blackedge_cleaned_iali.txt"
+file2 = "/workdir/projects/Copernicus_HRL/data_proc_status/3_preprocessed_tiles_EU/EU_preprocessed_tiles.txt"
+
+text_dif_intersect(file1,file2)
 
