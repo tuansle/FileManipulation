@@ -4,10 +4,10 @@ def text_dif_intersect(file1, file2):
     words1 = set(open(file1).read().split())
     words2 = set(open(file2).read().split())
 
-    duplicates  = words1.intersection(words2)
-    w1_dif_w2 = words1.difference(words2)
-    w2_dif_w1 = words2.difference(words1)
-    uniques = words1.difference(words2).union(words2.difference(words1))
+    duplicates  = sorted(words1.intersection(words2))
+    w1_dif_w2 = sorted(words1.difference(words2))
+    w2_dif_w1 = sorted(words2.difference(words1))
+    uniques = sorted(words1.difference(words2).union(words2.difference(words1)))
 
 
     print "Duplicates(%d):%s"%(len(duplicates),duplicates)
