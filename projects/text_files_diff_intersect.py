@@ -40,8 +40,8 @@ def text_dif_intersect(file1, file2):
         fl.write('%s\n' % (folder))
 
 
-file1 = "/workdir/projects/Copernicus_HRL/data_proc_status/3_preprocessed_tiles_EU/EU_blackedge_cleaned_iali.txt"
-file2 = "/workdir/projects/Copernicus_HRL/data_proc_status/3_preprocessed_tiles_EU/EU_preprocessed_tiles.txt"
+file1 = "/workdir/projects/Copernicus_HRL/data_proc_status/vahids_structure/tile_list_failing_wflows/tile_list_004_failing_A01_raw_files_list_to_be_processed_6595_files.txt"
+file2 = "/workdir/projects/Copernicus_HRL/data_proc_status/vahids_structure/tile_list_failing_wflows/forStefano/EX5_S1_processednon_processed.txt"
 
 text_dif_intersect(file1,file2)
 
