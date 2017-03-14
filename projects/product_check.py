@@ -89,7 +89,10 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None):
         target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
         target_filter = "M*WWS-"
 
-
+    list_tile_complete=[]
+    list_tile_notproc=[]
+    list_tile_incomplete=[]
+    list_tile_weird=[]
     for tile in tile_list:
         tile = tile.strip()
         list_img_src = []
@@ -101,7 +104,35 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None):
         for f in os.listdir(os.path.join(target_folder, tile)):
             if fnmatch.fnmatch(f, target_filter+'*.tif'):
                 list_img_target.append(f[1:17])
-        print tile, len(list_img_src), len(list_img_target), len(set(list_img_src)-set(list_img_target))
+
+        if len(set(list_img_target)) == 0:
+            list_tile_notproc.append(tile)
+        elif len(set(list_img_src)-set(list_img_target)) == 0:
+            if len(set(list_img_target)-set(list_img_src)) == 0:
+                list_tile_complete.append(tile)
+            else:
+                list_tile_weird.append(tile)
+        else:
+            list_tile_incomplete.append(tile)
+
+    tf = open('temp' + os.sep + src_wf + target_wf + '_complete.txt', 'w')
+    for item in list_tile_complete:
+        tf.write("%s\n" % item)
+
+    tf = open('temp' + os.sep + src_wf + target_wf + '_notproc.txt', 'w')
+    for item in list_tile_notproc:
+        tf.write("%s\n" % item)
+
+    tf = open('temp' + os.sep + src_wf + target_wf + '_incomplete.txt', 'w')
+    for item in list_tile_incomplete:
+        tf.write("%s\n" % item)
+
+    tf = open('temp' + os.sep + src_wf + target_wf + '_weird.txt', 'w')
+    for item in list_tile_weird:
+        tf.write("%s\n" % item)
+
+    tf.close()
+
 
 
 
@@ -123,4 +154,4 @@ if __name__ == "__main__":
     list02plus = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002_plus.txt'
     check_complete_product(list_file=list02,
                            src_wf='A0101pool',
-                           target_wf='C0102draft')
+                           target_wf='C0701draft')
