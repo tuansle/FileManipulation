@@ -52,7 +52,7 @@ def check_product(in_big_folder=None, products=[], outfile=None):
         fl = open(outfile, 'a')
         fl.write('%s\n' % (folder))
 
-def check_complete_product(list_file=None, src_wf=None, target_wf=None):
+def check_complete_product(list_file=None, src_wf=None, target_wf=None, branch='D'):
 
     with open(list_file) as f:
         tile_list = f.read().splitlines()
@@ -65,13 +65,13 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None):
         src_filter = "*SIG*VV"
     elif src_wf == 'C0102draft':
         src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/'
-        src_filter = "M*SSM--"
+        src_filter = branch + "*SSM--"
     elif src_wf == 'C0201draft':
         src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/'
-        src_filter = "M*WATER"
+        src_filter = branch + "*WATER"
     elif src_wf == 'C0701draft':
         src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
-        src_filter = "M*WWS-"
+        src_filter = branch + "*WWS-"
 
     if target_wf == 'A0101pool':
         target_folder = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
@@ -81,13 +81,13 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None):
         target_filter = "*SIG*VV"
     elif target_wf == 'C0102draft':
         target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/'
-        target_filter = "M*SSM--"
+        target_filter = branch + "*SSM--"
     elif target_wf == 'C0201draft':
         target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/'
-        target_filter = "M*WATER"
+        target_filter = branch + "*WATER"
     elif target_wf == 'C0701draft':
         target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
-        target_filter = "M*WWS-"
+        target_filter = branch + "*WWS-"
 
     list_tile_complete=[]
     list_tile_notproc=[]
@@ -97,13 +97,15 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None):
         tile = tile.strip()
         list_img_src = []
         list_img_target = []
-        for f in os.listdir(os.path.join(src_folder, tile)):
-            if fnmatch.fnmatch(f, src_filter+'*.tif'):
-                list_img_src.append(f[1:17])
+        if os.path.isdir(os.path.join(src_folder, tile)):
+            for f in os.listdir(os.path.join(src_folder, tile)):
+                if fnmatch.fnmatch(f, src_filter+'*.tif'):
+                    list_img_src.append(f[1:17])
 
-        for f in os.listdir(os.path.join(target_folder, tile)):
-            if fnmatch.fnmatch(f, target_filter+'*.tif'):
-                list_img_target.append(f[1:17])
+        if os.path.isdir(os.path.join(target_folder, tile)):
+            for f in os.listdir(os.path.join(target_folder, tile)):
+                if fnmatch.fnmatch(f, target_filter+'*.tif'):
+                    list_img_target.append(f[1:17])
 
         if len(set(list_img_target)) == 0:
             list_tile_notproc.append(tile)
@@ -115,19 +117,19 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None):
         else:
             list_tile_incomplete.append(tile)
 
-    tf = open('temp' + os.sep + src_wf + target_wf + '_complete.txt', 'w')
+    tf = open('temp' + os.sep + src_wf + target_wf + branch +'_complete.txt', 'w')
     for item in list_tile_complete:
         tf.write("%s\n" % item)
 
-    tf = open('temp' + os.sep + src_wf + target_wf + '_notproc.txt', 'w')
+    tf = open('temp' + os.sep + src_wf + target_wf + branch + '_notproc.txt', 'w')
     for item in list_tile_notproc:
         tf.write("%s\n" % item)
 
-    tf = open('temp' + os.sep + src_wf + target_wf + '_incomplete.txt', 'w')
+    tf = open('temp' + os.sep + src_wf + target_wf + branch + '_incomplete.txt', 'w')
     for item in list_tile_incomplete:
         tf.write("%s\n" % item)
 
-    tf = open('temp' + os.sep + src_wf + target_wf + '_weird.txt', 'w')
+    tf = open('temp' + os.sep + src_wf + target_wf + branch + '_weird.txt', 'w')
     for item in list_tile_weird:
         tf.write("%s\n" % item)
 
@@ -152,6 +154,9 @@ if __name__ == "__main__":
 
     list02 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002.txt'
     list02plus = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002_plus.txt'
-    check_complete_product(list_file=list02,
-                           src_wf='A0101pool',
-                           target_wf='C0701draft')
+
+    for target_wf in ['C0701draft', 'C0201draft', 'C0102draft']:
+        check_complete_product(list_file=list02plus,
+                               src_wf='A0101draft',
+                               target_wf=target_wf,
+                               branch='D')
