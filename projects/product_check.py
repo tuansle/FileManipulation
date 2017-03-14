@@ -52,16 +52,75 @@ def check_product(in_big_folder=None, products=[], outfile=None):
         fl = open(outfile, 'a')
         fl.write('%s\n' % (folder))
 
+def check_complete_product(list_file=None, src_wf=None, target_wf=None):
+
+    with open(list_file) as f:
+        tile_list = f.read().splitlines()
+
+    if src_wf == 'A0101pool':
+        src_folder = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
+        src_filter = "*SIG*VV"
+    elif src_wf == 'A0101draft':
+        src_folder = "/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/"
+        src_filter = "*SIG*VV"
+    elif src_wf == 'C0102draft':
+        src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/'
+        src_filter = "M*SSM--"
+    elif src_wf == 'C0201draft':
+        src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/'
+        src_filter = "M*WATER"
+    elif src_wf == 'C0701draft':
+        src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
+        src_filter = "M*WWS-"
+
+    if target_wf == 'A0101pool':
+        target_folder = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
+        target_filter = "*SIG*VV"
+    elif target_wf == 'A0101draft':
+        target_folder = "/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/"
+        target_filter = "*SIG*VV"
+    elif target_wf == 'C0102draft':
+        target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/'
+        target_filter = "M*SSM--"
+    elif target_wf == 'C0201draft':
+        target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/'
+        target_filter = "M*WATER"
+    elif target_wf == 'C0701draft':
+        target_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
+        target_filter = "M*WWS-"
 
 
-#check_product(in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_sgrt/B0101/EQUI7_EU010M/", products=['TMAXPLIA','TMAXSIG0','TMENSIG0','TMINPLIA','TMINSIG0','TP95SIG0','TP05SIG0'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TMAXSIG0','TMENSIG0','TMINSIG0','TSTDSIG0','TP10SIG0','TP90SIG0'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/", products=['water'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0101/EQUI7_EU010M/", products=['ssm'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/", products=['ssm'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/", products=['wws'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tfrqwater'])
-#check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TFRQDRY','TFRQWET'])
+    for tile in tile_list:
+        tile = tile.strip()
+        list_img_src = []
+        list_img_target = []
+        for f in os.listdir(os.path.join(src_folder, tile)):
+            if fnmatch.fnmatch(f, src_filter+'*.tif'):
+                list_img_src.append(f[1:17])
+
+        for f in os.listdir(os.path.join(target_folder, tile)):
+            if fnmatch.fnmatch(f, target_filter+'*.tif'):
+                list_img_target.append(f[1:17])
+        print tile, len(list_img_src), len(list_img_target), len(set(list_img_src)-set(list_img_target))
+
+
+
+if __name__ == "__main__":
+    #check_product(in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_sgrt/B0101/EQUI7_EU010M/", products=['TMAXPLIA','TMAXSIG0','TMENSIG0','TMINPLIA','TMINSIG0','TP95SIG0','TP05SIG0'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TMAXSIG0','TMENSIG0','TMINSIG0','TSTDSIG0','TP10SIG0','TP90SIG0'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tmenplia'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/", products=['water'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0101/EQUI7_EU010M/", products=['ssm'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/", products=['ssm'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/", products=['wws'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tfrqwater'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TFRQDRY','TFRQWET'])
+
+
+    list02 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002.txt'
+    list02plus = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002_plus.txt'
+    check_complete_product(list_file=list02,
+                           src_wf='A0101pool',
+                           target_wf='C0102draft')
