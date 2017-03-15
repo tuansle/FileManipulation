@@ -57,9 +57,18 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None, branch='
     with open(list_file) as f:
         tile_list = f.read().splitlines()
 
-    if src_wf == 'A0101pool':
+    if src_wf == 'A0101':
         src_folder = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
         src_filter = "*SIG*VV"
+    elif src_wf == 'C0102':
+        src_folder = '/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/'
+        src_filter = branch + "*SSM--"
+    elif src_wf == 'C0201':
+        src_folder = '/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/'
+        src_filter = branch + "*WATER"
+    elif src_wf == 'C0701':
+        src_folder = '/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
+        src_filter = branch + "*WWS-"
     elif src_wf == 'A0101draft':
         src_folder = "/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/"
         src_filter = "*SIG*VV"
@@ -73,9 +82,18 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None, branch='
         src_folder = '/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
         src_filter = branch + "*WWS-"
 
-    if target_wf == 'A0101pool':
+    if target_wf == 'A0101':
         target_folder = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
         target_filter = "*SIG*VV"
+    elif target_wf == 'C0102':
+        target_folder = '/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/'
+        target_filter = branch + "*SSM--"
+    elif target_wf == 'C0201':
+        target_folder = '//eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/'
+        target_filter = branch + "*WATER"
+    elif target_wf == 'C0701':
+        target_folder = '/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/'
+        target_filter = branch + "*WWS-"
     elif target_wf == 'A0101draft':
         target_folder = "/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/"
         target_filter = "*SIG*VV"
@@ -152,11 +170,12 @@ if __name__ == "__main__":
     #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TFRQDRY','TFRQWET'])
 
 
+    list01 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_001.txt'
     list02 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002.txt'
     list02plus = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002_plus.txt'
 
-    for target_wf in ['C0701draft', 'C0201draft', 'C0102draft']:
-        check_complete_product(list_file=list02plus,
-                               src_wf='A0101draft',
+    for target_wf in ['C0701', 'C0201', 'C0102']:
+        check_complete_product(list_file=list02,
+                               src_wf='A0101',
                                target_wf=target_wf,
-                               branch='D')
+                               branch='M')
