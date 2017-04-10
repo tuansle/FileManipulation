@@ -2,7 +2,7 @@
 import os, fnmatch
 
 
-def check_product(in_big_folder=None, products=[], outfile=None):
+def check_product(tile_list_file=None, in_big_folder=None, products=[], outfile=None):
     '''
     Check the whole  product folder, write processed tile into file
     :param in_big_folder:
@@ -10,6 +10,10 @@ def check_product(in_big_folder=None, products=[], outfile=None):
     :param outfile:
     :return:
     '''
+
+    with open(tile_list_file) as f:
+        tile_list = f.read().splitlines()
+
 
     # format product
     product_formatted = []
@@ -22,10 +26,16 @@ def check_product(in_big_folder=None, products=[], outfile=None):
 
     # initiate outfolder_list
     outfolder_list = []
+    not_proc = []
     # list all subfolder in this folder
-    for tile_folder in fnmatch.filter([x[0] for x in os.walk(in_big_folder)], '*/E*N*T*'):
+    for tile_folder in tile_list:
         # filter to get tile folder
+        tile_folder = os.path.join(in_big_folder, tile_folder)
         if not (tile_folder[-2:].isalpha() or tile_folder[-10:-8].isalpha()):  # TODO: add a better filter
+            # if folder not exist, add to not proc
+            if not os.path.exists(tile_folder):
+                not_proc.append(os.path.basename(tile_folder))
+                continue
             # go to every subfolder to check if there is any file with assigned pattern, add to list
             tif_list = (fnmatch.filter(os.listdir(tile_folder), 'M*.tif') + fnmatch.filter(os.listdir(tile_folder), 'D*.tif'))
             # create a temporary instance of product_formatted
@@ -49,8 +59,14 @@ def check_product(in_big_folder=None, products=[], outfile=None):
     outfile = os.path.join(OutFolder, in_big_folder[-28:-13].replace("/", "") + '_processed.txt')
     fl = open(outfile, 'w')
     for folder in outfolder_list:
-        fl = open(outfile, 'a')
         fl.write('%s\n' % (folder))
+
+    # write not prc
+    #write to file, really
+    outfile = os.path.join(OutFolder, in_big_folder[-28:-13].replace("/", "") + '_not_proc.txt')
+    fl = open(outfile, 'w')
+    for folder in not_proc:
+        fl.write('%s\n' % (os.path.basename(folder)))
 
 def check_complete_product(list_file=None, src_wf=None, target_wf=None, branch='D'):
 
@@ -157,6 +173,14 @@ def check_complete_product(list_file=None, src_wf=None, target_wf=None, branch='
 
 
 if __name__ == "__main__":
+
+    list01 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_001.txt'
+    list02 = '/eodc/private/tuwgeo/users/tle/temp/list_temp/tile_list_002.txt'
+    list02plus = '/eodc/private/tuwgeo/users/tle/temp/list_temp/tile_list_002_plus.txt'
+
+    listnew="/eodc/private/tuwgeo/users/tle/quality_check/check_missing_tile_042017/check_missing_tile_04_2017"
+
+
     #check_product(in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
     #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
     #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_sgrt/B0101/EQUI7_EU010M/", products=['TMAXPLIA','TMAXSIG0','TMENSIG0','TMINPLIA','TMINSIG0','TP95SIG0','TP05SIG0'])
@@ -169,13 +193,17 @@ if __name__ == "__main__":
     #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tfrqwater'])
     #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TFRQDRY','TFRQWET'])
 
+    # check_product(tile_list_file=listnew, in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/", products=['MASK1','SIG0','PLIA'])
+    # check_product(tile_list_file=listnew, in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TMAXSIG0','TMENSIG0','TMINSIG0','TSTDSIG0','TP10SIG0','TP90SIG0'])
+    # check_product(tile_list_file=listnew, in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/water/C0201/EQUI7_EU010M/", products=['water'])
+    # check_product(tile_list_file=listnew, in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C0102/EQUI7_EU010M/", products=['ssm'])
+    # check_product(tile_list_file=listnew, in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/products/datasets/wetness/C0701/EQUI7_EU010M/", products=['wws'])
+    check_product(tile_list_file=listnew, in_big_folder="/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['tfrqwater'])
+    #check_product(in_big_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M/", products=['TFRQDRY','TFRQWET'])
 
-    list01 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_001.txt'
-    list02 = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002.txt'
-    list02plus = '/eodc/private/tuwgeo/users/radar/projects_work/Copernicus_HRLs/data_processing_status/tile_list_002_plus.txt'
 
-    for target_wf in ['C0701', 'C0201', 'C0102']:
-        check_complete_product(list_file=list02,
-                               src_wf='A0101',
-                               target_wf=target_wf,
-                               branch='M')
+    # for target_wf in ['C0701', 'C0201', 'C0102']:
+    #     check_complete_product(list_file=listnew,
+    #                            src_wf='A0101',
+    #                            target_wf=target_wf,
+    #                            branch='M')

@@ -203,10 +203,10 @@ def tif_check_main(in_big_folder):
             dir_list_all.append(tile_folder)
 
     # process the list with multiprocessing pool
-    pool = mp.Pool(4)
+    pool = mp.Pool(10)
     pool.map(tif_check_mp, dir_list_all)
 
 
 
-tif_check_main("/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M/")
+tif_check_main("/eodc/private/tuwgeo/users/tle/Copernicus_HRLs/data_proc_2missing_tiles/Sentinel-1_CSAR/IWGRDH/")
 union_output()

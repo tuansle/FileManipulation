@@ -3,12 +3,12 @@ import os
 
 def asar_sync():
     # read file from pool
-    with open('/home/tuan/work/TUWGEO/asar_sync/files_in_directory.txt') as f:
+    with open('/eodc/private/tuwgeo/users/tle/asar_sync/files_in_directory.txt') as f:
         files_in_pool = f.read().splitlines()
 
 
     # read file from
-    with open('/home/tuan/work/TUWGEO/asar_sync/files_in_esa.txt') as f:
+    with open('/eodc/private/tuwgeo/users/tle/asar_sync/files_in_esa.txt') as f:
         files_in_esa = f.read().splitlines()
 
 

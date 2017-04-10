@@ -98,7 +98,7 @@ def process(filelist = None, full_path = True):
         indir = ""
         tilename = ""
     else:
-        indir = r"/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
+        indir = r"/eodc/private/tuwgeo/users/tle/Copernicus_HRLs/data_proc_2missing_tiles/Sentinel-1_CSAR/IWGRDH/preprocessed/datasets/resampled/A0101/EQUI7_EU010M"
         tilename = os.path.basename(os.path.splitext(filelist)[0])
 
     tilename_out = os.path.basename(os.path.splitext(filelist)[0])
@@ -111,7 +111,7 @@ def process(filelist = None, full_path = True):
         #        faulty_scenes = [x.strip() for x in f.readlines() if x.strip()]
 
     # IA: please change the output directory
-    outdir = r"/eodc/private/tuwgeo/users/tle/Copernicus_HRLs/Resampled_black_edge_removal/2ndwave/1sttime/{}".format(
+    outdir = r"/eodc/private/tuwgeo/users/tle/Copernicus_HRLs/data_proc_2missing_tiles_QC/EU/{}".format(
         tilename_out)
     if not os.path.exists(outdir):
         os.makedirs(outdir)
@@ -127,7 +127,7 @@ def process(filelist = None, full_path = True):
 def main(mp=True):
     filelist_list = []
 
-    file_lists_dir = '/eodc/private/tuwgeo/users/iali/Copernicus_HRLs_iali/round2_129_tiles/round2_129_bad_tile_list/1_100_tiles/'
+    file_lists_dir = '/eodc/private/tuwgeo/users/tle/Copernicus_HRLs/data_proc_2missing_tiles_QC/EU'
     for filelist in glob.glob(os.path.join(file_lists_dir,"E*N*T*.txt")):
         if os.stat(filelist).st_size != 0:
             filelist_list.append(filelist)

@@ -39,6 +39,7 @@ def write_to_file(list=None, outfile=None):
     tf.close()
     return 1
 
+
 if __name__ == '__main__':
     folder_param_EU = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU010M"
     folder_param_OC = "/eodc/private/tuwgeo/datapool_processed/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_OC010M"
@@ -56,9 +57,14 @@ if __name__ == '__main__':
     temppath_water = dir_path + os.sep + "temp" + os.sep + "checkD_water"  # add product here
     temppath_wetness = dir_path + os.sep + "temp" + os.sep + "checkD_wetness"  # add product here
 
-    #check_mix_dm(in_big_folder=folder_param_EU, temp_path=temppath_param_EU)
-    #check_mix_dm(in_big_folder=folder_param_OC, temp_path=temppath_param_OC)
-    #check_mix_dm(in_big_folder=folder_ssm, temp_path=temppath_ssm)
-    #check_mix_dm(in_big_folder=folder_ssm_OC, temp_path=temppath_ssm_OC)
-    #check_mix_dm(in_big_folder=folder_water, temp_path=temppath_water)
-    #check_mix_dm(in_big_folder=folder_wetness, temp_path=temppath_wetness)
+    for path in [temppath_param_EU,temppath_wetness,temppath_water,temppath_ssm_OC,temppath_ssm,temppath_param_OC]:
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+
+    check_mix_dm(in_big_folder=folder_param_EU, temp_path=temppath_param_EU)
+    # check_mix_dm(in_big_folder=folder_param_OC, temp_path=temppath_param_OC)
+    # check_mix_dm(in_big_folder=folder_ssm, temp_path=temppath_ssm)
+    # check_mix_dm(in_big_folder=folder_ssm_OC, temp_path=temppath_ssm_OC)
+    # check_mix_dm(in_big_folder=folder_water, temp_path=temppath_water)
+    # check_mix_dm(in_big_folder=folder_wetness, temp_path=temppath_wetness)
