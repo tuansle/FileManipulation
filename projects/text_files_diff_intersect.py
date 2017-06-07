@@ -40,8 +40,9 @@ def text_dif_intersect(file1, file2):
         fl.write('%s\n' % (folder))
 
 
-file1 = "/home/tuan/work/TUWGEO/projects/scao_2missing_tiles/senmao_2tiles_E047N002T1"
-file2 = "/home/tuan/work/TUWGEO/projects/scao_2missing_tiles/senmao_2tiles_E048N002T1"
+# file1 = "/shares/tle/exchange/staff/tle/4Stefano/ASAR_WS_GLOBAL_2017_03_14/new_superior_lists_cant_be_wrong_05_2017/initial_lists/Envisat_ASAR_above60_belowm60_combined"
+file1 = "/home/tle/code/eomdb/eomdb/examples_query/Europe_1st_all"
+file2 = "/home/tle/code/eomdb/eomdb/examples_query/Europe_1st_processed"
 
 text_dif_intersect(file1,file2)
 
