@@ -254,7 +254,7 @@ for tile in range(len(tiles_list)):
 		except:
 			print 'Not a supported file format.'
 
-		print '##### Tiles: ===> ({}/{}) ##### Files: ===> ({}/{}) #####'.format(tile+1, len(tiles_list), sig0_file+1, len(sig0_file_list))
+		print '##### Tiles: ===> ({}/{}) #####tuan Files: ===> ({}/{}) #####'.format(tile+1, len(tiles_list), sig0_file+1, len(sig0_file_list))
 	#print 'Tile ==========> {}/{} <=========='.format(tile, len(tiles_list))
 
 file1.close()
