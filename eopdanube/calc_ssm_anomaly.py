@@ -21,10 +21,11 @@ def calc_ssm_anomaly(tile_list,folderB02,folderC01,outfolder):
 
         # find mean and sdv ssm in B02 folder, if there are two images, raise an error
         for fil in os.listdir(folderB02_tile):
-            if fil[19:28] == "TSTDSSM--":
-                stdssm_arr, stdssm_arr_tag = read_tiff(os.path.join(folderB02_tile,fil))
-            elif fil[19:28] == "TMENSSM--":
-                menssm_arr, menssm_arr_tag = read_tiff(os.path.join(folderB02_tile,fil))
+            if fil.endswith(".tif"):
+                if fil[19:28] == "TSTDSSM--":
+                    stdssm_arr, stdssm_arr_tag = read_tiff(os.path.join(folderB02_tile,fil))
+                elif fil[19:28] == "TMENSSM--":
+                    menssm_arr, menssm_arr_tag = read_tiff(os.path.join(folderB02_tile,fil))
 
         # change type
         stdssm_arr = stdssm_arr.astype(np.int32)
