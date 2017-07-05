@@ -28,8 +28,8 @@ def calc_ssm_anomaly(tile_list,folderB02,folderC01,outfolder):
                     menssm_arr, menssm_arr_tag = read_tiff(os.path.join(folderB02_tile,fil))
 
         # change type
-        stdssm_arr = stdssm_arr.astype(np.int32)
-        menssm_arr = menssm_arr.astype(np.int32)
+        stdssm_arr = stdssm_arr.astype(np.float32)
+        menssm_arr = menssm_arr.astype(np.float32)
 
         # find all tif ssm file in C01 folder, add to  list
         ssm_list = os.listdir(folderC01_tile)
@@ -38,9 +38,9 @@ def calc_ssm_anomaly(tile_list,folderB02,folderC01,outfolder):
         for ssmfile in ssm_list:
             if ssmfile[19:28] == "SSM------":
                 ssm_arr, ssm_arr_tag = read_tiff(os.path.join(folderC01_tile,ssmfile))
-                ssm_arr_tag['datatype'] = np.int32
+                ssm_arr_tag['datatype'] = np.float32
                 # print ssm_arr_tag
-                ssm_arr = ssm_arr.astype(np.int32)
+                ssm_arr = ssm_arr.astype(np.float32)
                 # calculate sm anomaly
                 # print ssm_arr
                 # print "minmax", np.amin(ssm_arr), np.amax(ssm_arr)
