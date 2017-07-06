@@ -54,6 +54,7 @@ class TimeSeries2Analyst(Analyst):
         self.add_param(ParameterFloat("YAxis Max"))
         self.add_param(ParameterFloat("YAxis Min"))
         self.add_param(ParameterFloat("Color"))
+        self.add_param(ParameterFloat("bar_width"))
         self.add_param(ParameterMultipleDatasetSelection("Datasets2"))
         self.add_param(ParameterFloat("Scale2"))
         self.add_param(ParameterFloat("YAxis Max2"))
@@ -64,6 +65,7 @@ class TimeSeries2Analyst(Analyst):
         self.add_param(ParameterFloat("YAxis Max3"))
         self.add_param(ParameterFloat("YAxis Min3"))
         self.add_param(ParameterFloat("Color3"))
+
         self.add_param(ParameterBoolean("Day of Year", default=False))
         self.add_param(ParameterFloat("Axis font size"))
         self.colors = [(1, 0, 0),
@@ -88,29 +90,35 @@ class TimeSeries2Analyst(Analyst):
         scale = params["Scale"]
         y_max = params["YAxis Max"]
         y_min = params["YAxis Min"]
+        color = params["Color"]
+        bar_width = params["bar_width"]
+        font_size = params["Axis font size"]
         is_doy = None
 
         timeseries2 = params["Datasets2"]
         scale2 = params["Scale2"]
         y_max2 = params["YAxis Max2"]
         y_min2 = params["YAxis Min2"]
+        color2 = params["Color2"]
 
         timeseries3 = params["Datasets3"]
         scale3 = params["Scale3"]
         y_max3 = params["YAxis Max3"]
         y_min3 = params["YAxis Min3"]
+        color3 = params["Color3"]
 
         # prepare figure
         ax = figure.add_subplot(111)
         figure.subplots_adjust(right=1.55)
-        ax.set_title("Time Series")
-        ax.set_xlabel("Day of Year" if is_doy else "Time")
+        # ax.set_title("Time Series")
+        # ax.set_xlabel("Day of Year" if is_doy else "Time")
         ax.grid(False)
         if y_max:
             ax.set_ylim(top=y_max)
         if y_min:
             ax.set_ylim(bottom=y_min)
-        ax.set_ylabel("Datasets")
+        # ax.set_ylabel("Datasets")
+
 
         ax2 = ax.twinx()
         ax2.grid(False)
@@ -119,7 +127,7 @@ class TimeSeries2Analyst(Analyst):
             ax2.set_ylim(top=y_max2)
         if y_min2:
             ax2.set_ylim(bottom=y_min2)
-        ax2.set_ylabel("Datasets2")
+        # ax2.set_ylabel("Datasets2")
 
         ax3 = ax.twinx()
         ax3.grid(False)
@@ -134,9 +142,12 @@ class TimeSeries2Analyst(Analyst):
             ax3.set_ylim(top=y_max3)
         if y_min3:
             ax3.set_ylim(bottom=y_min3)
-        ax2.set_ylabel("Datasets3")
+        # ax2.set_ylabel("Datasets3")
+
+
 
         # plot time series 1
+        dataset1_name = None
         for i, ts in enumerate(timeseries):
             if is_doy:
                 ts_data = ts.read(doy=True)
@@ -166,7 +177,13 @@ class TimeSeries2Analyst(Analyst):
                                                                           np.mean(data),
                                                                           np.std(data))
             info.append(stats_str)
-            p1, = ax.plot(times, data, "o-", color=self.colors[i % len(self.colors)], label=ts.dataset.name)
+            bar = None
+            if bar_width:
+                bar = ax.bar(times, data, width=bar_width, color='cornflowerblue')
+            else:
+                bar = ax.bar(times, data, width=4, color='cornflowerblue')
+            ax3.xaxis_date()
+            dataset1_name = ts.dataset.name
 
         # plot time series 2
         for i, ts in enumerate(timeseries2):
@@ -198,9 +215,14 @@ class TimeSeries2Analyst(Analyst):
                                                                           np.mean(data),
                                                                           np.std(data))
             info.append(stats_str)
-            p2, = ax2.plot(times, data, "o-", color=self.colors[i + 1 % len(self.colors)], label=ts.dataset.name)
+            p2 = None
+            if color2:
+                p2, = ax2.plot(times, data, "o-", color=color2, label=ts.dataset.name)
+            else:
+                p2, = ax2.plot(times, data, "o-", color=self.colors[i + 1 % len(self.colors)], label=ts.dataset.name)
 
-        # plot time series 3
+
+                # plot time series 3
         for i, ts in enumerate(timeseries3):
             if is_doy:
                 ts_data = ts.read(doy=True)
@@ -230,16 +252,25 @@ class TimeSeries2Analyst(Analyst):
                                                                           np.mean(data),
                                                                           np.std(data))
             info.append(stats_str)
-            bar = ax3.bar(times, data, width=4, color='cornflowerblue')
-            ax3.xaxis_date()
+            p3 = None
+            if color:
+                p3, = ax3.plot(times, data, "o-", color=color, label=ts.dataset.name)
+            else:
+                p3, = ax3.plot(times, data, "o-", color=self.colors[i % len(self.colors)], label=ts.dataset.name)
 
         # legend
-        lines = [p1, p2]
-        ax.legend(lines, [l.get_label() for l in lines], loc='upper left')
-        ax3.legend(bar[0], 'test', loc='upper right')
+        lines = [p2, p3]
+        ax.legend([bar], [dataset1_name], loc='upper right')
+        ax.grid(linestyle=':', linewidth=0.5)
+        ax2.legend(lines, [l.get_label() for l in lines], loc='upper left')
 
-        ax.yaxis.label.set_color(p1.get_color())
-        ax2.yaxis.label.set_color(p2.get_color())
+        # ax.yaxis.label.set_color(p1.get_color())
+        # ax2.yaxis.label.set_color(p2.get_color())
+        # ax3.yaxis.label.set_color(bar.get_color())
+        if font_size:
+            ax.tick_params(labelsize=font_size)
+            ax2.tick_params(labelsize=font_size)
+            ax3.tick_params(labelsize=font_size)
         figure.tight_layout()
 
         return None
