@@ -41,8 +41,8 @@ def text_dif_intersect(file1, file2):
 
 
 # file1 = "/shares/tle/exchange/staff/tle/4Stefano/ASAR_WS_GLOBAL_2017_03_14/new_superior_lists_cant_be_wrong_05_2017/initial_lists/Envisat_ASAR_above60_belowm60_combined"
-file1 = "/home/tle/code/eomdb/eomdb/examples_query/Europe_1st_all"
-file2 = "/home/tle/code/eomdb/eomdb/examples_query/Europe_1st_processed"
+file1 = "/home/tle/code/eomdb/eomdb/examples_query/contain_dup"
+file2 = "/home/tle/code/eomdb/eomdb/examples_query/no_dup"
 
 text_dif_intersect(file1,file2)
 
