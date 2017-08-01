@@ -61,12 +61,8 @@ def calc_ssm_anomaly(tile_list, folderB02, folderC01, outfolder, seasonal):
                                 # print "using:", fil, "for", ssmfile
                                 if fil[19:28] == "SSTDSSM--":
                                     stdssm_arr, stdssm_arr_tag = read_tiff(os.path.join(folderB02_tile, fil))
-                                    # change type
-                                    stdssm_arr = stdssm_arr.astype(np.float32)
                                 elif fil[19:28] == "SMENSSM--":
                                     menssm_arr, menssm_arr_tag = read_tiff(os.path.join(folderB02_tile, fil))
-                                    #change type
-                                    menssm_arr = menssm_arr.astype(np.float32)
 
                 # define mask
                 # mask

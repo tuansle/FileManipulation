@@ -9,6 +9,10 @@ from sgrt.common.utils.colortable import get_gdal_ct
 
 
 def apply_water_mask_tile(tile_list, in_tile_folder, out_folder, mask_folder):
+    # create outfolder if it doesn't exist
+    if not os.path.exists(out_folder):
+        os.makedirs(out_folder)
+
     for til in tile_list:
         # set folder path
         folder_in_tile = os.path.join(in_tile_folder, til)
@@ -72,10 +76,13 @@ if __name__ == "__main__":
     #                       out_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/walther_request",
     #                       mask_file="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/walther_request/water_mask/EU075M_E036N018T6_2010lc030.tif")
 
-    apply_water_mask_tile(tile_list=["E036N024T6"],
+    apply_water_mask_tile(tile_list=["E042N018T6", "E042N012T6", "E048N006T6" , "E048N012T6", "E048N018T6", "E048N024T6", "E054N006T6", "E054N012T6",
+"E054N018T6",
+"E060N006T6",
+"E060N012T6", "E060N018T6"   ],
                           in_tile_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/products/datasets/ssm/C0102/EQUI7_EU500M",
-                          out_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/walther_request",
-                          mask_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/walther_request/water_mask/GLC/Europe_75m/EQUI7_EU075M/")
+                          out_folder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube_masked/Envisat_ASAR/WS/products/datasets/ssm/C0102/EQUI7_EU500M",
+                          mask_folder="/eodc/private/tuwgeo/datapool_processed/GLC30/dataset/EQUI7_EU075M/")
 
     # apply_water_mask_tile(tile_list=["E036N006T6", "E036N012T6", "E036N018T6", "E036N024T6", "E036N030T6"],
     #                       folderB02="/eodc/private/tuwgeo/users/tle/eopdanube/datapool_proc_testssm/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
