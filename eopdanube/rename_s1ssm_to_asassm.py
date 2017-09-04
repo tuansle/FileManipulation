@@ -15,5 +15,5 @@ def batch_rename(folder, dst_name="S1"):
         raise Exception("dst_name should be ASA or S1")
 
 if __name__ == "__main__":
-    batch_rename(folder="/home/tle/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M/E048N012T6",
-                 dst_name="S1")
+    batch_rename(folder="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/E048N012T6/",
+                 dst_name="ASA")

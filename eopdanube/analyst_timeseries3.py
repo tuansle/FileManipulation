@@ -46,16 +46,16 @@ from TSAnalyst.Parameter import ParameterSingleDatasetSelection
 from TSAnalyst.Parameter import ParameterMultipleDatasetSelection
 
 
-class TimeSeries2Analyst(Analyst):
+class TimeSeries3Analyst(Analyst):
     def __init__(self):
         # init paramters
-        super(TimeSeries2Analyst, self).__init__()
+        super(TimeSeries3Analyst, self).__init__()
         self.add_param(ParameterMultipleDatasetSelection("Datasets"))
         self.add_param(ParameterFloat("Scale"))
         self.add_param(ParameterFloat("YAxis Max"))
         self.add_param(ParameterFloat("YAxis Min"))
-        self.add_param(ParameterString("Color"))
-        self.add_param(ParameterFloat("Bar Width"))
+        self.add_param(ParameterString("Color1"))
+        self.add_param(ParameterFloat("Graph Element1"))
         self.add_param(ParameterMultipleDatasetSelection("Datasets2"))
         self.add_param(ParameterFloat("Scale2"))
         self.add_param(ParameterFloat("YAxis Max2"))
@@ -86,15 +86,15 @@ class TimeSeries2Analyst(Analyst):
 
     @staticmethod
     def analyst_name():
-        return "Time Series 2"
+        return "Time Series 3"
 
     def plot(self, figure, info, params):
         timeseries = params["Datasets"]
         scale = params["Scale"]
         y_max = params["YAxis Max"]
         y_min = params["YAxis Min"]
-        color = params["Color"]
-        bar_width = params["Bar Width"]
+        color1 = params["Color1"]
+        element1 = params["Graph Element1"]
         font_size = params["Font Size"]
         # disable day of the year function
         is_doy = None
@@ -114,19 +114,19 @@ class TimeSeries2Analyst(Analyst):
         element3 = params["Graph Element3"]
 
         # prepare figure
-        ax = figure.add_subplot(111)
+        ax1 = figure.add_subplot(111)
         figure.subplots_adjust(right=1.55)
         # ax.set_title("Time Series")
         # ax.set_xlabel("Day of Year" if is_doy else "Time")
-        ax.grid(False)
+        ax1.grid(False)
         if y_max:
-            ax.set_ylim(top=y_max)
+            ax1.set_ylim(top=y_max)
         if y_min:
-            ax.set_ylim(bottom=y_min)
+            ax1.set_ylim(bottom=y_min)
         # ax.set_ylabel("Datasets")
 
 
-        ax2 = ax.twinx()
+        ax2 = ax1.twinx()
         ax2.grid(False)
 
         if y_max2:
@@ -135,7 +135,7 @@ class TimeSeries2Analyst(Analyst):
             ax2.set_ylim(bottom=y_min2)
         # ax2.set_ylabel("Datasets2")
 
-        ax3 = ax.twinx()
+        ax3 = ax1.twinx()
         ax3.grid(False)
 
         # move the spine of the second axes outwards
@@ -183,13 +183,11 @@ class TimeSeries2Analyst(Analyst):
                                                                           np.mean(data),
                                                                           np.std(data))
             info.append(stats_str)
-            bar = None
-            if bar_width or color:
-                bar = ax.bar(times, data, width=bar_width, color=color)
+            p1 = None
+            if color1 or element1:
+                p1, = ax1.plot(times, data, element1, color=color1, label=ts.dataset.name)
             else:
-                bar = ax.bar(times, data, width=5, color='cornflowerblue')
-            ax3.xaxis_date()
-            dataset1_name = ts.dataset.name
+                p1, = ax1.plot(times, data, "o-", color=self.colors[i + 1 % len(self.colors)], label=ts.dataset.name)
 
         # plot time series 2
         times2 = None
@@ -233,7 +231,8 @@ class TimeSeries2Analyst(Analyst):
             else:
                 p2, = ax2.plot(times, data, "o-", color=self.colors[i + 1 % len(self.colors)], label=ts.dataset.name)
 
-        # plot time series 3: Climatologic Mean SSM
+
+                # plot time series 3: Climatologic Mean SSM
         for i, ts in enumerate(timeseries3):
             if is_doy:
                 ts_data = ts.read(doy=True)
@@ -277,15 +276,15 @@ class TimeSeries2Analyst(Analyst):
 
         # legend
         lines = [p2, p3]
-        ax.legend([bar], [dataset1_name], loc='upper right')
-        ax.grid(linestyle=':', linewidth=0.5)
+        ax1.legend([p1], [dataset1_name], loc='upper right')
+        ax1.grid(linestyle=':', linewidth=0.5)
         ax2.legend(lines, [l.get_label() for l in lines], loc='upper left')
 
         # ax.yaxis.label.set_color(p1.get_color())
         # ax2.yaxis.label.set_color(p2.get_color())
         # ax3.yaxis.label.set_color(bar.get_color())
         if font_size:
-            ax.tick_params(labelsize=font_size)
+            ax1.tick_params(labelsize=font_size)
             ax2.tick_params(labelsize=font_size)
             ax3.tick_params(labelsize=font_size)
         figure.tight_layout()

@@ -4,8 +4,6 @@ from sgrt.common.formats.geotiff.read_tiff import read_tiff
 from sgrt.common.formats.geotiff.write_tiff import write_tiff
 from osgeo import gdal
 import numpy as np
-from matplotlib import pyplot
-from datetime import datetime
 
 
 def calc_ssm_anomaly(tile_list, folderB02, folderC01, outfolder):
@@ -24,10 +22,6 @@ def calc_ssm_anomaly(tile_list, folderB02, folderC01, outfolder):
         # create folder if it doesn't exist
         if not os.path.exists(outfolder_tile):
             os.makedirs(outfolder_tile)
-
-
-
-
 
         # find all tif ssm file in C01 folder, add to  list
         ssm_list = os.listdir(folderC01_tile)
@@ -74,7 +68,8 @@ def calc_ssm_anomaly(tile_list, folderB02, folderC01, outfolder):
                     # ct.SetColorEntry(1, (0, 255, 0, 255))
                     # ct.SetColorEntry(2, (255, 0, 0, 255))
                     # ct.SetColorEntry(3, (255, 0, 255, 255))
-                    write_tiff(os.path.join(outfolder_tile, ssmfile.replace("MMENSSM--", "SSMANOM--")), src_arr=image_arr,
+                    write_tiff(os.path.join(outfolder_tile, ssmfile.replace("MMENSSM--", "SSMANOM--")),
+                               src_arr=image_arr,
                                tags_dict=ssm_arr_tag)
                     # pyplot.imsave(os.path.join(outfolder_tile, ssmfile.replace("SSM------", "SSMANOM--")), image_arr)
             except Exception, e:
@@ -83,29 +78,32 @@ def calc_ssm_anomaly(tile_list, folderB02, folderC01, outfolder):
 
 
 if __name__ == "__main__":
-    # test with:
-    # tile list:
-    # folder B02: /eodc/private/tuwgeo/users/tle/eopdanube/datapool_proc_testssm
-    # folder C01
-    # outfolder
-    #
-    # calc_ssm_anomaly(tile_list=["E042N018T6",
-    #                             "E042N012T6",
-    #                             "E048N006T6",
-    #                             "E048N012T6",
-    #                             "E048N018T6",
-    #                             "E048N024T6",
-    #                             "E054N006T6",
-    #                             "E054N012T6",
-    #                             "E054N018T6",
-    #                             "E060N006T6",
-    #                             "E060N012T6",
-    #                             "E060N018T6"],
-    #                  folderB02="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
-    #                  folderC01="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm/C1002/EQUI7_EU500M/",
-    #                  outfolder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm_anomaly/EQUI7_EU500M_Float_test",
-    #                  seasonal=True)
+    tile_list = ["E042N018T6",
+                 "E042N012T6",
+                 "E048N006T6",
+                 "E048N012T6",
+                 "E048N018T6",
+                 "E048N024T6",
+                 "E054N006T6",
+                 "E054N012T6",
+                 "E054N018T6",
+                 "E060N006T6",
+                 "E060N012T6",
+                 "E060N018T6"],
 
+    tile_list_test=["E048N012T6"]
+
+    # #tests1
+    # calc_ssm_anomaly(tile_list=tile_list_test,
+    #                  folderB02="/home/tle/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M",
+    #                  folderC01="/home/tle/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M",
+    #                  outfolder="/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm_anomaly/EQUI7_500M")
+
+    #ASA
+    calc_ssm_anomaly(tile_list=tile_list_test,
+                     folderB02="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
+                     folderC01="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
+                     outfolder="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/products/datasets/ssm_anomaly/EQUI7_500M")
 
     # #
     # calc_ssm_anomaly(tile_list=["E042N018T6",
@@ -126,22 +124,22 @@ if __name__ == "__main__":
     # #
 
     #
-    calc_ssm_anomaly(tile_list=["E042N018T6",
-                                "E042N012T6",
-                                "E048N006T6",
-                                "E048N012T6",
-                                "E048N018T6",
-                                "E048N024T6",
-                                "E054N006T6",
-                                "E054N012T6",
-                                "E054N018T6",
-                                "E060N006T6",
-                                "E060N012T6",
-                                "E060N018T6"],
-                     folderB02="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
-                     folderC01="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
-                     outfolder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/products/datasets/ssm_anomaly/EQUI7_EU500M_Final")
-
+    # calc_ssm_anomaly(tile_list=["E042N018T6",
+    #                             "E042N012T6",
+    #                             "E048N006T6",
+    #                             "E048N012T6",
+    #                             "E048N018T6",
+    #                             "E048N024T6",
+    #                             "E054N006T6",
+    #                             "E054N012T6",
+    #                             "E054N018T6",
+    #                             "E060N006T6",
+    #                             "E060N012T6",
+    #                             "E060N018T6"],
+    #                  folderB02="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
+    #                  folderC01="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
+    #                  outfolder="/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/products/datasets/ssm_anomaly/EQUI7_EU500M_Final")
+    #
 
     #
     # calc_ssm_anomaly(tile_list=["E042N018T6",
@@ -162,8 +160,8 @@ if __name__ == "__main__":
 
 
 
-#REDO FIX BUG
-#GM
+    # REDO FIX BUG
+    # GM
     # calc_ssm_anomaly(tile_list=["E054N012T6",
     #                             "E060N012T6",
     #                             "E060N018T6"],
