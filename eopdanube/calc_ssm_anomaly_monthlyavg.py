@@ -89,18 +89,18 @@ if __name__ == "__main__":
                  "E054N018T6",
                  "E060N006T6",
                  "E060N012T6",
-                 "E060N018T6"],
+                 "E060N018T6"]
 
     tile_list_test=["E048N012T6"]
 
-    # #tests1
-    # calc_ssm_anomaly(tile_list=tile_list_test,
+    # # #tests1
+    # calc_ssm_anomaly(tile_list=tile_list,
     #                  folderB02="/home/tle/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M",
     #                  folderC01="/home/tle/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M",
     #                  outfolder="/data/DATAPROCESSING/eopdanube_testmixssm/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm_anomaly/EQUI7_500M")
 
     #ASA
-    calc_ssm_anomaly(tile_list=tile_list_test,
+    calc_ssm_anomaly(tile_list=tile_list,
                      folderB02="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
                      folderC01="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/",
                      outfolder="/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/products/datasets/ssm_anomaly/EQUI7_500M")

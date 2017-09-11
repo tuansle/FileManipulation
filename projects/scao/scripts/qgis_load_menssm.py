@@ -19,10 +19,10 @@ from PyQt4.QtCore import QFileInfo
 # "E060N012T6",
 # "E060N018T6"]
 
-in_path = r"/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Envisat_ASAR/WS/parameters/datasets/par_stat/B0201/EQUI7_EU500M/"
+in_path = r"/home/tle/data/DATAPROCESSING/eopdanube/Sentinel-1_CSAR/IWGRDH/parameters/datasets/par_stat/B0201/EQUI7_EU500M"
 
 rootGroup = iface.layerTreeView().layerTreeModel().rootGroup()
-testGroup = rootGroup.addGroup("asaws_menssm_clima")
+testGroup = rootGroup.addGroup("s1a_menssm_clima")
 # for tilename in tiles:
 tile_path = in_path
 # var_ids = ["SSMANOM"]
@@ -32,7 +32,7 @@ fnames = []
 # add dry,wet,water layers
 for root, dirs, files in os.walk(in_path):
     for file in files:
-        if file.endswith(".tif") and file.startswith('D20')  and "MMENSSM" in file:
+        if file.endswith(".tif") and file.startswith('D99')  and "MMENSSM" in file:  #change to 'D99' for clima
             fnames.append(os.path.join(root, file))
 
 print len(fnames)

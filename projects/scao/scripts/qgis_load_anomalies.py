@@ -19,10 +19,10 @@ from PyQt4.QtCore import QFileInfo
 # "E060N012T6",
 # "E060N018T6"]
 
-in_path = r"/eodc/private/tuwgeo/users/radar/datapool_processed_draft_eopdanube/Sentinel-1_CSAR/IWGRDH/products/datasets/ssm_anomaly/EQUI7_EU500M_Final/"
+in_path = r"/home/tle/data/DATAPROCESSING/eopdanube_testmixssm/Envisat_ASAR/WS/products/datasets/ssm_anomaly/EQUI7_500M/"
 
 rootGroup = iface.layerTreeView().layerTreeModel().rootGroup()
-testGroup = rootGroup.addGroup("s1a_ssm_anomalies")
+testGroup = rootGroup.addGroup("matched_ssm_anomalies")
 # for tilename in tiles:
 tile_path = in_path
 var_ids = ["SSMANOM"]
