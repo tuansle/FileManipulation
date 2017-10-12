@@ -1,0 +1,121 @@
+import pandas as pd
+import numpy as np
+import os, sys
+import matplotlib.pyplot as plt
+import matplotlib
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_US.utf8')
+
+
+def read_csv_to_dataframe(csvfile):
+    dataframe = pd.read_csv(csvfile, parse_dates=True, index_col=0)
+    return dataframe
+
+
+def read_ssm_csv(folder_path, format_csv=False):
+    #format csv
+    if format_csv:
+        csv_format(folder_path)
+    count = 0
+    for csvfile in os.listdir(folder_path):
+        dataframe = read_csv_to_dataframe(os.path.join(folder_path,csvfile))
+        if count == 0:
+            dataframe_big = dataframe
+            count +=1
+            continue
+
+        if len(dataframe_big) >= len(dataframe):
+            dataframe_big = dataframe_big.join(dataframe, rsuffix='_y')
+        else:
+            dataframe_big = dataframe.join(dataframe_big, rsuffix='_y')
+
+        count +=1
+    print count, "dataframes have been joined"
+    # add avg column
+    dataframe_big['avg'] = dataframe_big.mean(axis=1)
+    return dataframe_big
+
+def csv_format(csvfolder):
+    for csvfile in os.listdir(csvfolder):
+        with open(os.path.join(csvfolder,csvfile), 'r') as fin:
+            data = fin.read().splitlines(True)
+        if "value" in data[0]:
+            continue
+        else:
+            with open(os.path.join(csvfolder,csvfile), 'w') as fout:
+                fout.writelines("value\n")
+                fout.writelines(data[2:])
+
+def plot_ssm_ssmanom_prec(folder_ssm, folder_ssm_anom, csvprec, format_csv=False):
+    #read ssm
+    ssm = read_ssm_csv(folder_ssm, format_csv=format_csv)
+    #decode
+    ssm = ssm/2
+
+    #read ssm anom
+    ssm_anom = read_ssm_csv(folder_ssm_anom, format_csv=format_csv)
+
+    #read prec
+    prec = read_csv_to_dataframe(csvprec)
+
+    #plotting
+    #ssm
+    ax = ssm.plot(y=['avg'])
+
+    # #ssmanom
+    ax2 = ax.twinx()
+    ssm_anom.plot(y=['avg'],style='r-', ax=ax2)
+
+
+    #precipitation
+    ax3 = ax.twinx()
+
+    prec.plot(y=['prec'], ax = ax3)
+    ax.set_xlim(['2006-09-09 10:35:00', '2012-09-09 10:36:00'])
+    ax3.set_ylim([0, 200])
+
+    print ssm
+    print ssm_anom
+    print prec
+
+    plt.show()
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    '''
+    dataframe = read_ssm_csv("/home/tle/shares/home/EOP_Danube/TSAnalystData/test/", format_csv=True)
+    print dataframe
+
+    ax = dataframe.plot(y=['avg']) #ssm average 9 points
+
+    ax2 = ax.twinx()
+    # ax2.set_ylim([-9,9])
+    # dataframe.plot(y=['value','avg'], ax=ax, secondary_y=True)    #anomalies average 9 points
+    dataframe = dataframe/2
+    dataframe.plot(y=['avg'],style=['r-','g-'], ax=ax2)    #anomalies average 9 points
+                                                #bar, precipitation data
+    plt.show()
+
+    prec = read_csv_to_dataframe("/home/tle/code/rs-data-readers/tests/test.csv")
+
+    print prec
+
+    ax3 = ax.twinx()
+    ax_prec = prec.plot(y='prec')
+    ax_prec.set_ylim([0, 40])
+    ax_prec.set_xlim(['2014-09-09 10:35:00', '2016-09-09 10:36:00'])
+    print prec.max()
+    plt.show()
+    '''
+
+    plot_ssm_ssmanom_prec(folder_ssm="/home/tle/shares/home/EOP_Danube/TSAnalystData/201009_ssm_orig_asa_bad_match/",
+                          folder_ssm_anom="/home/tle/shares/home/EOP_Danube/TSAnalystData/201009_ssmanom_orig_asa_bad_match/",
+                          csvprec="/home/tle/shares/home/EOP_Danube/TSAnalystData/prec_editted",
+                          format_csv=True)
+
